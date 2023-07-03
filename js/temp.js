@@ -45,6 +45,3 @@ function inComparedRange(i) {
     return i < scrollTopList.length - 1;
 }
 
-<div className="container-fluid ">
-    <div className="row">
-        <div className="col-md-12 ">
