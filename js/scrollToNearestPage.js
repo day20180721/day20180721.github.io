@@ -1,11 +1,15 @@
 // 變換解析度時會錯誤，因為pageOffsetTop在第一次keyEvent時就固定了
-const rightKey = 39;
 const leftKey = 37;
+const upKey = 38;
+const rightKey = 39;
+const downKey = 40;
+
 let pageOffsetTop = [];
 
-window.onload = function (){
+window.onload = function () {
     bindOffsetValues();
 }
+
 function bindOffsetValues() {
     if (pageOffsetTop.length === 0) {
         $(".portfolio-page").each(function (i, e) {
@@ -19,52 +23,71 @@ function bindOffsetValues() {
     }
 }
 
+$(document).keydown(function (e) {
+    preventDefaultKeydownOnBody(e);
+});
+
+function preventDefaultKeydownOnBody(e) {
+    if (e.keyCode === upKey || e.keyCode === downKey && e.target.nodeName == 'BODY') {
+        event.preventDefault();
+    }
+}
+
 document.addEventListener("keyup", keyup);
+
 function keyup(event) {
     switch (event.keyCode) {
-        case rightKey:
+        case downKey:
             scrollToNearestPageOnRightClick();
             break;
-        case leftKey:
+        case upKey:
             scrollToNearestPageOnLeftClick();
             break;
     }
 }
+
 function scrollToNearestPageOnRightClick() {
     for (let offsetTop in pageOffsetTop) {
-        if(lessThen(offsetTop)){
-            scrollTo(offsetTop);
+        if (lessThen(offsetTop)) {
+            scrollToDest(offsetTop);
             break;
         }
     }
 }
+
 function lessThen(offsetTop) {
     let currentScroll = document.documentElement.scrollTop;
     return pageOffsetTop[offsetTop] > currentScroll;
 }
 
-function scrollToNearestPageOnLeftClick(){
-    for(let i = pageOffsetTop.length - 1; i >= 0 ;i--){
-        if(greaterThan(i)){
-            scrollTo(i);
+function scrollToNearestPageOnLeftClick() {
+    for (let i = pageOffsetTop.length - 1; i >= 0; i--) {
+        if (greaterThan(i)) {
+            scrollToDest(i);
             break;
-        }else if(onTop())  {
-            scrollTo(pageOffsetTop.length - 1)
+        } else if (onTop()) {
+            scrollToDest(pageOffsetTop.length - 1)
             break;
         }
     }
 }
-function greaterThan(offsetTop){
+
+function greaterThan(offsetTop) {
     let currentScroll = document.documentElement.scrollTop;
     return pageOffsetTop[offsetTop] < currentScroll;
 }
 
-function scrollTo(offsetTop) {
-    document.documentElement.scrollTop = pageOffsetTop[offsetTop];
-    console.log("scroll to " + pageOffsetTop[offsetTop])
+function scrollToDest(offsetTop) {
+    let dest = pageOffsetTop[offsetTop];
+    window.scrollTo({
+        top: dest,
+        behavior: "smooth"
+        // behavior: "instant"
+    });
+    console.log("scroll to " + dest)
 }
 
-function onTop(){
+function onTop() {
     return document.documentElement.scrollTop === 0;
 }
 
