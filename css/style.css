@@ -288,8 +288,6 @@ header .follow a:hover{
     color:#666;
     font-size: 1.7rem;
     padding-top: .3rem;
-
-
 }
 
 
@@ -323,18 +321,14 @@ media queries
     header.active{
         left: 0%;
     }
-
     .cursor-1,
     .cursor-2{
         display: none;
     }
-
 }
-
 @media(max-width:450px){
     html{
         font-size: 50%;
-
     }
     header{
         width:100%;
